@@ -1,15 +1,15 @@
 """
-This program implements the RSA algorithm for cryptography.
-It randomly selects two prime numbers from a txt file of prime numbers and 
-uses them to produce the public and private keys. Using the keys, it can 
-either encrypt or decrypt messages.
+Dieses Programm implementiert den RSA Algorithmus zum verschlüsseln.
+Er wählt zufällig zwei Primzahlen aus einer txt-Datei von Primzahlen und
+nutzt sie um den Public und den Private Key zu erzeugen. Unter verwendung der Schlüssel
+ist es möglich Nachichten zu verschlüsseln oder zu entschlüsseln.
 """
 
 import random
 
 def gcd(a, b):
     """
-    Performs the Euclidean algorithm and returns the gcd of a and b
+    Euklidischer Algorithmus, Rückgabe des ggt von a und b
     """
     if (b == 0):
         return a
@@ -18,8 +18,7 @@ def gcd(a, b):
 
 def xgcd(a, b):
     """
-    Performs the extended Euclidean algorithm
-    Returns the gcd, coefficient of a, and coefficient of b
+    Erweiterter Euklidischer Algorithmus
     """
     x, old_x = 0, 1
     y, old_y = 1, 0
@@ -34,8 +33,8 @@ def xgcd(a, b):
 
 def chooseE(totient):
     """
-    Chooses a random number, 1 < e < totient, and checks whether or not it is 
-    coprime with the totient, that is, gcd(e, totient) = 1
+    Wähle eine Zufallszahl e für die gilt 1 < e < totient und prüft ob e und der totient
+    teilerfremd sind ggT(e, totient) = 1
     """
     while (True):
         e = random.randrange(2, totient)
@@ -45,11 +44,10 @@ def chooseE(totient):
 
 def chooseKeys():
     """
-    Selects two random prime numbers from a list of prime numbers which has 
-    values that go up to 100k. It creates a text file and stores the two 
-    numbers there where they can be used later. Using the prime numbers, 
-    it also computes and stores the public and private keys in two separate 
-    files.
+    Wählt zufällig zwei primzahlen aus einer liste von Primzahlen die bis 100k geht.
+    Sie erstellt eine txt Datei und speichert die beiden Zahlen für eine spätere Benutzung.
+    Bei Benutzung der Primzahlen verarbeitet und speichert sie den Public und den Privat Key
+    in zwei seperaten Dateien.
     """
 
     # choose two random numbers within the range of lines where 
@@ -94,14 +92,16 @@ def chooseKeys():
 
 def encrypt(message, file_name = 'public_keys.txt', block_size = 2):
     """
-    Encrypts a message (string) by raising each character's ASCII value to the 
-    power of e and taking the modulus of n. Returns a string of numbers.
-    file_name refers to file where the public key is located. If a file is not 
-    provided, it assumes that we are encrypting the message using our own 
-    public keys. Otherwise, it can use someone else's public key, which is 
-    stored in a different file.
-    block_size refers to how many characters make up one group of numbers in 
-    each index of encrypted_blocks.
+    Verschlüsselt eine Nachricht (string) durch Berechnung des ASCII-Werts jedes Zeichens
+    hoch e modulo n und gibt einen Zahlen String zurück.
+    
+    file_name bezieht sich auf die Datei wo der Public Key liegt. Wenn eine Datei nicht
+    vorhanden ist, dann wird die Nachicht mit dem eigenen Public Key verschlüsselt.
+    Sonst kann der Public Key von jemand anderem verwendet werden, der in einer anderen
+    Datei gespeichert ist
+    
+    block_size bezieht sich darauf wie viele Zeichen eine gruppe von Zahlen in jedem Index
+    von verschlüsselten Blöcken ausmachen.
     """
 
     try:
@@ -149,10 +149,10 @@ def encrypt(message, file_name = 'public_keys.txt', block_size = 2):
 
 def decrypt(blocks, block_size = 2):
     """
-    Decrypts a string of numbers by raising each number to the power of d and 
-    taking the modulus of n. Returns the message as a string.
-    block_size refers to how many characters make up one group of numbers in
-    each index of blocks.
+    Entschlüsselt einen String von Zahlen, indem die Zahlen hoch d modulo n gerechnet werden
+    und gibt die Nachricht als String zurück.
+    block_size gibt an, wie viele Zeichen eine Gruppe von Zahlen in
+    jedem Index von Blöcken ausmachen
     """
 
     fo = open('private_keys.txt', 'r')
@@ -189,28 +189,28 @@ def decrypt(blocks, block_size = 2):
 def main():
     # we select our primes and generate our public and private keys,
     # usually done once
-    choose_again = input('Do you want to generate new public and private keys? (y or n) ')
-    if (choose_again == 'y'):
+    choose_again = input('Möchten sie einen neuen Public und Privat Key generieren ? (j oder n) ')
+    if (choose_again == 'j'):
         chooseKeys()
 
-    instruction = input('Would you like to encrypt or decrypt? (Enter e or d): ')
-    if (instruction == 'e'):
-        message = input('What would you like to encrypt?\n')
-        option = input('Do you want to encrypt using your own public key? (y or n) ')
+    instruction = input('Möchten sie verschlüsseln oder entschlüsseln (v oder e): ')
+    if (instruction == 'v'):
+        message = input('Was möchten sie verschlüsseln?\n')
+        option = input('Möchtest du mit deinem eigenen Public Key verschlüsseln? (j oder n) ')
 
-        if (option == 'y'):
-            print('Encrypting...')
+        if (option == 'j'):
+            print('Verschlüsseln...')
             print(encrypt(message))
         else:
-            file_option = input('Enter the file name that stores the public key: ')
-            print('Encrypting...')
+            file_option = input('Geben sie den Namen der Datei ein in welcher der Public Key ist: ')
+            print('Verschlüsseln...')
             print(encrypt(message, file_option))
 
-    elif (instruction == 'd'):
-        message = input('What would you like to decrypt?\n')
-        print('Decryption...')
+    elif (instruction == 'e'):
+        message = input('Was möchten sie entschlüsseln?\n')
+        print('Entschlüsseln...')
         print(decrypt(message))
     else:
-        print('That is not a proper instruction.')
+        print('Das ist keine gültige Eingabe.')
 
 main()
