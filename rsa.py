@@ -90,6 +90,7 @@ def chooseKeys():
     f_private.write(str(d) + '\n')
     f_private.close()
 
+
 def encrypt(message, file_name = 'public_keys.txt', block_size = 2):
     """
     Verschlüsselt eine Nachricht (string) durch Berechnung des ASCII-Werts jedes Zeichens
@@ -186,6 +187,12 @@ def decrypt(blocks, block_size = 2):
 
     return message
 
+def showMessage(message):
+    result = ""
+    for i in range(len(message)):
+        result += str(ord(message[i]))
+    print(f"ASCII Code von der Nachricht: {result}")
+
 def main():
     # we select our primes and generate our public and private keys,
     # usually done once
@@ -196,6 +203,7 @@ def main():
     instruction = input('Möchten sie verschlüsseln oder entschlüsseln (v oder e): ')
     if (instruction == 'v'):
         message = input('Was möchten sie verschlüsseln?\n')
+        showMessage(message)
         option = input('Möchtest du mit deinem eigenen Public Key verschlüsseln? (j oder n) ')
 
         if (option == 'j'):
